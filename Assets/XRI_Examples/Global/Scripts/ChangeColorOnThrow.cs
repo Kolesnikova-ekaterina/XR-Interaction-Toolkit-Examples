@@ -6,7 +6,8 @@ public class ChangeColorOnThrow : MonoBehaviour
 {
     private XRGrabInteractable grabInteractable;
     private Renderer objectRenderer;
-    private AudioSource audioSource;
+    private AudioSource audioSourceRoblox;
+    private AudioSource audioSourceRickRoll;
 
     public Color thrownColor = Color.red;
     public Color defaultColor = Color.white;
@@ -15,9 +16,15 @@ public class ChangeColorOnThrow : MonoBehaviour
     {
         grabInteractable = GetComponent<XRGrabInteractable>();
         objectRenderer = GetComponent<Renderer>();
-        audioSource = GetComponent<AudioSource>();
+        audioSourceRoblox = GetComponents<AudioSource>()[0];
+        audioSourceRickRoll = GetComponents<AudioSource>()[1];
+       
+        
 
-        objectRenderer.material = new Material(objectRenderer.material);
+        if (objectRenderer != null)
+        {
+            objectRenderer.material = new Material(objectRenderer.material);
+        }
 
         grabInteractable.selectExited.AddListener(OnThrow);
         grabInteractable.selectEntered.AddListener(OnGrab);
@@ -30,9 +37,9 @@ public class ChangeColorOnThrow : MonoBehaviour
             objectRenderer.material.color = thrownColor;
         }
 
-        if (audioSource != null)
+        if (audioSourceRoblox != null)
         {
-            audioSource.Play(); // проигрываем звук броска
+            audioSourceRoblox.Play(); // проигрываем звук броска
         }
     }
 
@@ -42,5 +49,13 @@ public class ChangeColorOnThrow : MonoBehaviour
         {
             objectRenderer.material.color = defaultColor;
         }
+
+        var rand = Random.Range(0, 3);
+        if (audioSourceRickRoll != null && rand == 0 && (gameObject.tag=="rickrolled"|| gameObject.tag == "Destroyer"))
+        {
+            Debug.Log(gameObject.name);
+            audioSourceRickRoll.Play(); // проигрываем звук броска
+        }
     }
 }
+
